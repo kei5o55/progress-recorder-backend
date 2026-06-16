@@ -16,6 +16,8 @@ Dockerを用いた開発経験
 
 のように、従来のrailsコマンドの先頭に`docker compose exec web`を付ける。
 
+wslを使用しているため、Docker側で Setting → Resource → WSL integration から設定をオンに
+
 
 rails new を実行するとファイルの所有者がrootになり保存できなくなる場合がある。なんか色々変になって保存できなくなったときは
 
