@@ -3,6 +3,7 @@
 dbとフロントとの負荷分散を実装予定
 
 ### 起動
+
 VS codeのターミナルで`docker compose up` → `localhost:3000` で表示されたらok
 
 ## その他注意点とか
@@ -22,6 +23,7 @@ rails new を実行するとファイルの所有者がrootになり保存でき
 
 ## 他のPCでこの環境を再現する手順（クローンした後の流れ）
 #### 1. リポジトリをクローンしてフォルダに入る
+wslからやってね
 `git clone https://github.com/kei5o55/progress-recorder-backend.git`
 `cd progress-recorder-backend`
 
