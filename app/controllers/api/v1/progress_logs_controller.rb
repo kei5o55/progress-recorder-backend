@@ -1,10 +1,15 @@
 class Api::V1::ProgressLogsController < ApplicationController
     def create
-        puts "\n========================================"
-        puts "🚀 [開通成功] フロントから進捗データが届きました！"
-        puts "お届けものの中身: #{params[:progress_log].inspect}"
-        puts "========================================\n"
+        # 生の params ではなく、安全に許可した progress_log_params を使う
+        puts "お届けものの中身: #{progress_log_params.inspect}"
 
-        render json:{status: "success",message:"Rails received your data"},status: :ok
+        render json: { status: "success" }, status: :ok
+    end
+
+    private
+
+    # 許可するパラメータの型を安全に定義する（Strong Parameters）
+    def progress_log_params
+        params.require(:progress_log).permit(:title, :status)
     end
 end
