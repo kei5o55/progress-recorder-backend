@@ -4,7 +4,9 @@ dbとフロントとの負荷分散を実装予定
 
 ### 起動
 
-VS codeのターミナルで`docker compose up` → `localhost:3000` で表示されたらok
+VS codeのターミナルで`docker compose up` → `localhost:3001` で表示されたらok 
+
+**(3001なので注意。なぜかポートが干渉したので、開発環境に合わせてます）**
 
 ## その他注意点とか
 
@@ -22,6 +24,8 @@ wslを使用しているため、Docker側で Setting → Resource → WSL integ
 rails new を実行するとファイルの所有者がrootになり保存できなくなる場合がある。なんか色々変になって保存できなくなったときは
 
 `sudo chown -R $USER:$USER ~/src/progress-recorder-backend`
+
+
 
 ## 他のPCでこの環境を再現する手順（クローンした後の流れ）
 #### 1. リポジトリをクローンしてフォルダに入る
