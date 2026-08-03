@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project: one
+  date: 2026-08-03
+  title: MyString
+  start_hour: 1
+  start_minute: 1
+  end_hour: 1
+  end_minute: 1
+  color: MyString
+
+two:
+  project: two
+  date: 2026-08-03
+  title: MyString
+  start_hour: 1
+  start_minute: 1
+  end_hour: 1
+  end_minute: 1
+  color: MyString

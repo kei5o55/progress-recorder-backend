@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  due_date: 2026-08-03
+  memo: MyText
+  target_hours: 9.99
+  pomodoro_work_minutes: 1
+  pomodoro_break_minutes: 1
+  start_date: 2026-08-03
+  end_date: 2026-08-03
+  color: MyString
+
+two:
+  name: MyString
+  due_date: 2026-08-03
+  memo: MyText
+  target_hours: 9.99
+  pomodoro_work_minutes: 1
+  pomodoro_break_minutes: 1
+  start_date: 2026-08-03
+  end_date: 2026-08-03
+  color: MyString

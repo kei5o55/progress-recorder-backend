@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project: one
+  started_at: 2026-08-03 20:27:50
+  ended_at: 2026-08-03 20:27:50
+  paused_at: 2026-08-03 20:27:50
+  note: MyText
+  status: MyString
+  timer_mode: MyString
+  pomodoro_count: 1
+  pomodoro_work_minutes: 1
+  pomodoro_break_minutes: 1
+
+two:
+  project: two
+  started_at: 2026-08-03 20:27:50
+  ended_at: 2026-08-03 20:27:50
+  paused_at: 2026-08-03 20:27:50
+  note: MyText
+  status: MyString
+  timer_mode: MyString
+  pomodoro_count: 1
+  pomodoro_work_minutes: 1
+  pomodoro_break_minutes: 1
