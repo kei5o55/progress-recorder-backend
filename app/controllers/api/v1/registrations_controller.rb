@@ -1,13 +1,21 @@
 class Api::V1::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
-  private
+  def create
+    build_resource(sign_up_params)
 
-  def respond_with(resource, _opts = {})
-    if resource.persisted?
-      render json: { message: 'ユーザー登録成功', user: resource }, status: :ok
+    if resource.save
+      render json: {
+        message: "ユーザー登録成功",
+        user: {
+          id: resource.id,
+          email: resource.email
+        }
+      }, status: :created
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+      render json: {
+        errors: resource.errors.full_messages
+      }, status: :unprocessable_entity
     end
   end
 end

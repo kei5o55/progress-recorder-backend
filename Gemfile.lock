@@ -394,7 +394,6 @@ DEPENDENCIES
   devise
   devise-jwt
   image_processing (~> 1.2)
-  jwt
   kamal
   pg (~> 1.1)
   puma (>= 5.0)

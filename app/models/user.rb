@@ -1,3 +1,9 @@
 class User < ApplicationRecord
-  has_secure_password
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+
+  devise :database_authenticatable,#DBに保存されたパスワードでログイン
+         :registerable,#ユーザー登録・変更など
+         :validatable,#emailやpasswordのバリデーション
+         :jwt_authenticatable,
+         jwt_revocation_strategy: self
 end
