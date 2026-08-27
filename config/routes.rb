@@ -18,11 +18,8 @@ Rails.application.routes.draw  do
       get "health", to: "health#index"
       get 'me', to: 'users#me'
       get 'test',to: 'users#test'
-      get 'projects', to: 'projects#index'
-      post 'projects', to: 'projects#create'
-      resources :projects do
-        # POST /api/v1/projects/:project_id/commits が使えるようになります
-        resources :commits, only: [:create]
+      resources :projects, only: [:index, :create] do
+        resources :commits, only: [:index, :create]
       end
     end
   end

@@ -4,6 +4,19 @@ module Api
     class CommitsController < ApplicationController
       #ユーザ別をなくそう
       #before_action :authenticate_user!
+      
+      def index
+        # 1. URLの project_id から対象のプロジェクトを取得
+        project = Project.find(params[:project_id])
+
+        # 2. そのプロジェクトに紐づくコミット一覧を新しい順で取得
+        commits = project.commits.order(created_at: :desc)
+
+        # 3. JSON で返却
+        render json: commits, status: :ok
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Project not found" }, status: :not_found
+      end
 
       # POST /api/v1/projects/:project_id/commits
       def create
