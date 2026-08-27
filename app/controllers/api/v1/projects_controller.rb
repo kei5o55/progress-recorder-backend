@@ -11,6 +11,13 @@ module Api
         #commits = current_user.commits
         #sessions = current_user.work_sessions
 
+        #いったんはログイン機能なしで全部のprojectsを
+        projects = Project.all.order(created_at: :desc)
+  
+        # Commit や WorkSession モデルがある場合は全件取得（無ければ [] でOK）
+        commits = defined?(Commit) ? Commit.all : []
+        sessions = defined?(WorkSession) ? WorkSession.all : []
+
         render json: {
           projects: projects,
           commits: commits,
