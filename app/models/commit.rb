@@ -18,10 +18,12 @@ class Commit < ApplicationRecord
   def image_url
     return nil unless image.attached?
 
-    # 本番環境（S3等）でも安全にURLを取得できるように host を考慮
-    Rails.application.routes.url_helpers.rails_blob_url(
-      image,
-      host: ActiveStorage::Current.url_options[:host] || "localhost:3000"
-    )
+    # url_for または rails_blob_path を使い、ホスト依存を安全に処理する
+    # hostが取得できない場合は "localhost:3000" を採用
+    host = ActiveStorage::Current.url_options&.[](:host) || "localhost:3000"
+    
+    Rails.application.routes.url_helpers.rails_blob_url(image, host: host)
+  rescue StandardError
+    nil
   end
 end

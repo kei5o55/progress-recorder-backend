@@ -29,7 +29,7 @@ module Api
         #commit.user = current_user
 
         if commit.save
-          render json: commit_response(commit), status: :created
+          render json: commit, status: :ok
         else
           render json: { errors: commit.errors.full_messages }, status: :unprocessable_entity
         end
@@ -38,8 +38,8 @@ module Api
       private
 
       def commit_params
-        # image カラムとしてファイルを受け取る
-        params.require(:commit).permit(:note, :ended_at, :image)
+        # :image を追加許可
+        params.require(:commit).permit(:note, :duration_ms, :started_at, :ended_at, :image)
       end
 
       def commit_response(commit)
