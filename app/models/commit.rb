@@ -1,8 +1,8 @@
 # app/models/commit.rb
 class Commit < ApplicationRecord
   belongs_to :project
-  #いったんユーザ別を無しに
-  #belongs_to :user
+  # いったんユーザ別を無しに
+  # belongs_to :user
   has_one_attached :image
 
   validates :duration_ms, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
@@ -18,11 +18,11 @@ class Commit < ApplicationRecord
   def image_url
     return nil unless image.attached?
 
-    # url_for または rails_blob_path を使い、ホスト依存を安全に処理する
-    # hostが取得できない場合は "localhost:3000" を採用
-    host = ActiveStorage::Current.url_options&.[](:host) || "localhost:3000"
+    # only_path: true を機能させるため、ActiveStorage::Current にダミーの host をセット
+    ActiveStorage::Current.url_options = { host: "localhost", only_path: true }
     
-    Rails.application.routes.url_helpers.rails_blob_url(image, host: host)
+    # rails_blob_path で相対パスを取得
+    Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
   rescue StandardError
     nil
   end
