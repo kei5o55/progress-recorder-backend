@@ -1,7 +1,8 @@
 # app/models/commit.rb
 class Commit < ApplicationRecord
   belongs_to :project
-  belongs_to :user
+  #いったんユーザ別を無しに
+  #belongs_to :user
   has_one_attached :image
 
   validates :duration_ms, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true

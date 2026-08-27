@@ -20,6 +20,10 @@ Rails.application.routes.draw  do
       get 'test',to: 'users#test'
       get 'projects', to: 'projects#index'
       post 'projects', to: 'projects#create'
+      resources :projects do
+        # POST /api/v1/projects/:project_id/commits が使えるようになります
+        resources :commits, only: [:create]
+      end
     end
   end
 end
