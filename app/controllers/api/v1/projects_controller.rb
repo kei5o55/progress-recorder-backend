@@ -2,14 +2,14 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      before_action :authenticate_user! # Devise-JWTによる認証チェック
+      #before_action :authenticate_user! # Devise-JWTによる認証チェック
 
       # GET /api/v1/projects
       def index
         # ログインユーザーのプロジェクトのみ取得
-        projects = current_user.projects.order(created_at: :desc)
-        commits = current_user.commits
-        sessions = current_user.work_sessions
+        #projects = current_user.projects.order(created_at: :desc)
+        #commits = current_user.commits
+        #sessions = current_user.work_sessions
 
         render json: {
           projects: projects,
@@ -20,7 +20,7 @@ module Api
 
       # POST /api/v1/projects
       def create
-        project = current_user.projects.build(project_params)
+        project = Project.new(project_params)
 
         if project.save
           render json: project, status: :created
@@ -40,8 +40,14 @@ module Api
 
       def project_params
         params.require(:project).permit(
-          :name, :due_date, :memo, :target_hours,
-          :pomodoro_work_minutes, :pomodoro_break_minutes
+          :name,
+          :memo,
+          :completed,
+          :due_date,
+          :end_date,
+          :target_hours,
+          :pomodoro_work_minutes,
+          :pomodoro_break_minutes
         )
       end
     end

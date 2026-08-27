@@ -1,11 +1,11 @@
 # app/models/project.rb
 class Project < ApplicationRecord
-  belongs_to :user
+  # belongs_to :user
   has_many :work_sessions, dependent: :destroy
   has_many :commits, dependent: :destroy
   has_many :day_schedules, dependent: :nullify
 
-  validates :title, presence: true # または name
+  validates :name, presence: true # または name
 
   before_validation :normalize_attributes
 
@@ -14,7 +14,6 @@ class Project < ApplicationRecord
   def normalize_attributes
     self.due_date = due_date.presence&.strip
     self.memo = memo.presence&.strip
-    self.color = color.presence&.strip
 
     self.target_hours = nil if target_hours.present? && target_hours <= 0
     self.pomodoro_work_minutes = nil if pomodoro_work_minutes.present? && pomodoro_work_minutes <= 0
