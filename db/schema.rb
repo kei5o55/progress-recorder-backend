@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_28_100903) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_28_154113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -120,7 +120,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_28_100903) do
     t.uuid "project_id", null: false
     t.datetime "started_at"
     t.string "status"
-    t.string "timer_mode"
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_work_sessions_on_project_id"
   end
