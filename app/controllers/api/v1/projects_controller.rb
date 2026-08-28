@@ -52,11 +52,11 @@ module Api
           :name,
           :memo,
           :completed,
-          :dueDate,               # ← フロントからのキー名
-          :endDate,               # ← フロントからのキー名
-          :targetHours,           # ← フロントからのキー名
-          :pomodoroWorkMinutes,   # ← フロントからのキー名
-          :pomodoroBreakMinutes   # ← フロントからのキー名
+          :dueDate,               
+          :endDate,               
+          :targetHours,           
+          :pomodoroWorkMinutes,   
+          :pomodoroBreakMinutes   
         )
 
         # 2. Railsの属性名（スネークケース）にマッピングしてハッシュで返す
