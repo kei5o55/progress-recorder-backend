@@ -18,11 +18,12 @@ module Api
         commits = defined?(Commit) ? Commit.all : []
         sessions = defined?(WorkSession) ? WorkSession.all : []
 
-        render json: {
-          projects: projects,
+        render json: projects,status: :ok
+        #json: {
+          #projects: projects,
           #commits: commits,
           #sessions: sessions
-        }, status: :ok
+        #}, status: :ok
       end
 
       # POST /api/v1/projects
