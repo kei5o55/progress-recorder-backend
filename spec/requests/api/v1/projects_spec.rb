@@ -51,6 +51,7 @@ RSpec.describe "Api::V1::Projects", type: :request do
         {
           project: {
             name: "",
+            completed: false,
             targetHours: "10"
           }
         }
@@ -62,6 +63,29 @@ RSpec.describe "Api::V1::Projects", type: :request do
         }.not_to change(Project, :count)
 
         expect(response).to have_http_status(:unprocessable_content)
+
+        json = JSON.parse(response.body)
+        expect(json["errors"]).to be_present
+      end
+    end
+
+    context "想定しない数値（マイナスの目標時間）が送信された場合" do
+      let(:invalid_params) do
+        {
+          project: {
+            name: "ire",
+            completed: false,
+            targetHours: "-1"
+          }
+        }
+      end
+
+      it "DBに追加されず、422 Unprocessable Entity とエラーメッセージが返ること" do
+        expect {
+          post "/api/v1/projects", params: invalid_params
+        }.not_to change(Project, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
 
         json = JSON.parse(response.body)
         expect(json["errors"]).to be_present

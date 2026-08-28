@@ -6,6 +6,7 @@ class Project < ApplicationRecord
   has_many :day_schedules, dependent: :nullify
 
   validates :name, presence: true # または name
+  validates :target_hours, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   before_validation :normalize_attributes
 
@@ -15,8 +16,7 @@ class Project < ApplicationRecord
     self.due_date = due_date.presence
     self.memo = memo.presence&.strip
 
-    self.target_hours = nil if target_hours.present? && target_hours <= 0
-    self.pomodoro_work_minutes = nil if pomodoro_work_minutes.present? && pomodoro_work_minutes <= 0
-    self.pomodoro_break_minutes = nil if pomodoro_break_minutes.present? && pomodoro_break_minutes <= 0
+    #self.pomodoro_work_minutes = nil if pomodoro_work_minutes.present? && pomodoro_work_minutes <= 0
+    #self.pomodoro_break_minutes = nil if pomodoro_break_minutes.present? && pomodoro_break_minutes <= 0
   end
 end
