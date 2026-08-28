@@ -20,8 +20,8 @@ module Api
 
         render json: {
           projects: projects,
-          commits: commits,
-          sessions: sessions
+          #commits: commits,
+          #sessions: sessions
         }, status: :ok
       end
 
@@ -45,7 +45,7 @@ module Api
 
       private
 
-      def project_params
+      def project_params #ユーザid等を許可しなぃぃ
         params.require(:project).permit(
           :name,
           :memo,

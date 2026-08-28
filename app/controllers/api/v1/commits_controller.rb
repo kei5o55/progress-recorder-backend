@@ -21,17 +21,23 @@ module Api
       # POST /api/v1/projects/:project_id/commits
       def create
         #いったんユーザ別をなくそう
+        # 👇 ここをコメントアウトして、URLから誰でも Project を探せるようにしている
         #project = current_user.projects.find(params[:project_id])
         # 1. ユーザーを挟まず、直接 Project ID から検索
         project = Project.find(params[:project_id])
         commit = project.commits.build(commit_params)
         #こっちも
+        # 👇 ここもコメントアウトされているため、作成者（user）の紐付けがない
         #commit.user = current_user
 
         if commit.save
           render json: commit, status: :ok
         else
           render json: { errors: commit.errors.full_messages }, status: :unprocessable_entity
+        end
+        rescue ActiveRecord::RecordNotFound
+          # 他人のプロジェクトIDを指定した場合は「見つかりません（404）」を返す
+          render json: { error: "Project not found or access denied" }, status: :not_found
         end
       end
 
