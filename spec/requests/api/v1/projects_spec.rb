@@ -9,6 +9,7 @@ RSpec.describe "Api::V1::Projects", type: :request do
           project: {
             name: "COMITIA新刊",
             dueDate: "2026-08-29",
+            completed: false,
             memo: "表紙ラフ作成から",
             targetHours: "10",                # フロントからは文字列で届く
             pomodoroWorkMinutes: "25",

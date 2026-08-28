@@ -46,21 +46,26 @@ module Api
 
       private
 
-      def project_params #ユーザid等を許可しなぃぃ
-        params.require(:project).permit(
+      def project_params # ユーザid等を許可しない
+        # 1. フロントから届くキャメルケースのキー名を許可する
+        p = params.require(:project).permit(
           :name,
           :memo,
           :completed,
-          :due_date,
-          :end_date,
-          :target_hours,
-          :pomodoro_work_minutes,
-          :pomodoro_break_minutes
+          :dueDate,               # ← フロントからのキー名
+          :endDate,               # ← フロントからのキー名
+          :targetHours,           # ← フロントからのキー名
+          :pomodoroWorkMinutes,   # ← フロントからのキー名
+          :pomodoroBreakMinutes   # ← フロントからのキー名
         )
+
+        # 2. Railsの属性名（スネークケース）にマッピングしてハッシュで返す
         {
           name: p[:name],
-          due_date: p[:dueDate], # ← dueDate を due_date にセット！
           memo: p[:memo],
+          completed: p[:completed],
+          due_date: p[:dueDate],
+          end_date: p[:endDate],
           target_hours: p[:targetHours],
           pomodoro_work_minutes: p[:pomodoroWorkMinutes],
           pomodoro_break_minutes: p[:pomodoroBreakMinutes]
