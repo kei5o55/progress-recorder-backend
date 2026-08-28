@@ -44,8 +44,23 @@ module Api
       private
 
       def commit_params
-        # :image を追加許可
-        params.require(:commit).permit(:note, :duration_ms, :started_at, :ended_at, :image)
+        # 1. フロントから届くキャメルケースのキーを許可
+        p = params.require(:commit).permit(
+          :note,
+          :durationMs,
+          :startedAt,
+          :endedAt,
+          :image
+        )
+
+        # 2. Railsモデルの属性名（スネークケース）にマッピング
+        {
+          note: p[:note],
+          duration_ms: p[:durationMs], # DBのカラム名に合わせて変換
+          started_at: p[:startedAt],   # DBのカラム名に合わせて変換
+          ended_at: p[:endedAt],       # DBのカラム名に合わせて変換
+          image: p[:image]
+        }
       end
 
       def commit_response(commit)
