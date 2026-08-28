@@ -61,3 +61,34 @@ wslからやってね
 - 画像URLの相対パス化による環境依存の排除
   - **課題**：バックエンド側で絶対パス(`https://locahost3000/`)を生成すると、将来的な本番環境へのデプロイ時にめんどくさくなりそう
   - **工夫**：Active Storageのレスポンスを相対パス（`/rails/active_storage/`)で返却、フロント側でurlと結合処理を施すことで環境によってバックエンド側のコード書き換えや不具合が発生しない柔軟な設計とした
+## 💡 設計の工夫・技術的こだわり
+
+### 1. API境界（中間層）におけるデータ表現（CamelCase / snake_case）の吸収
+
+フロントエンド（TypeScript/React）とバックエンド（Ruby on Rails/PostgreSQL）でそれぞれ最適な命名規則を守りつつ、開発効率とコードの堅牢性を両立させる設計を採用しました。
+
+#### ⚖️ 設計思想と採用したアプローチ
+- **各レイヤーの文化を尊重:**
+  - フロントエンド: JavaScript / TypeScript の標準である **`camelCase`** (`dueDate`, `durationMs`)
+  - バックエンド: Ruby / Rails / SQL の標準である **`snake_case`** (`due_date`, `duration_ms`)
+- **境界線（Strong Parameters）での相互変換:**
+  データが各層（フロントの画面描画、Railsのモデル・DB操作）に入り込む手前の中間層（コントローラーの Strong Parameters）で相互変換を完結させています。
+
+#### 🛠️ 具体的な実装
+- **リクエスト時 (Frontend ➔ Backend):**
+  フロントエンドからは `camelCase` のまま送信し、Rails の `Strong Parameters` 内で `snake_case` のハッシュへマッピングして受け取ります。
+  
+  ```ruby
+  # app/controllers/api/v1/commits_controller.rb
+  def commit_params
+    # 1. フロントから届いた camelCase パラメータを許可
+    p = params.require(:commit).permit(:durationMs, :startedAt, :endedAt, :note)
+
+    # 2. バックエンド内部（ActiveRecord）用へ snake_case にマッピング
+    {
+      duration_ms: p[:durationMs],
+      started_at:  p[:startedAt],
+      ended_at:    p[:endedAt],
+      note:        p[:note]
+    }
+  end
