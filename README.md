@@ -41,6 +41,20 @@ wslからやってね
 #### 4. サーバー起動
 `docker compose up`
 
+## test
+- ① 全てのテストを実行する場合
+  `docker compose exec web bundle exec rspec`
+
+- ② モデルテストだけ実行する場合
+  `docker compose exec web bundle exec rspec spec/models/project_spec.rb`
+
+- ③ APIリクエストテストだけ実行する場合
+  `docker compose exec web bundle exec rspec spec/requests/api/v1/projects_spec.rb`
+
+- ④ 特定の行（例: 15行目の it ブロック）だけピンポイントで実行する場合
+  
+  `docker compose exec web bundle exec rspec spec/requests/api/v1/projects_spec.rb:15`
+
 
 
 ## 工夫
