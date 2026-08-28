@@ -12,7 +12,7 @@ class Project < ApplicationRecord
   private
 
   def normalize_attributes
-    self.due_date = due_date.presence&.strip
+    self.due_date = due_date.presence
     self.memo = memo.presence&.strip
 
     self.target_hours = nil if target_hours.present? && target_hours <= 0
