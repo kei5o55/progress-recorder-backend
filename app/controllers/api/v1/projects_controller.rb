@@ -57,6 +57,14 @@ module Api
           :pomodoro_work_minutes,
           :pomodoro_break_minutes
         )
+        {
+          name: p[:name],
+          due_date: p[:dueDate], # ← dueDate を due_date にセット！
+          memo: p[:memo],
+          target_hours: p[:targetHours],
+          pomodoro_work_minutes: p[:pomodoroWorkMinutes],
+          pomodoro_break_minutes: p[:pomodoroBreakMinutes]
+        }
       end
     end
   end
