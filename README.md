@@ -22,7 +22,7 @@ wslを使用しているため、Docker側で Setting → Resource → WSL integ
 
 rails new を実行するとファイルの所有者がrootになり保存できなくなる場合がある。なんか色々変になって保存できなくなったときは
 
-`sudo chown -R $USER:$USER ~/src/progress-recorder-backend`
+`sudo chown -R $USER:$USER ~/worklog/progress-recorder-backend`
 
 
 
