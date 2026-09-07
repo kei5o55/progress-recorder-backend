@@ -7,34 +7,34 @@ Devise.setup do |config|
     jwt.secret = ENV["DEVISE_JWT_SECRET_KEY"]
 
     jwt.dispatch_requests = [
-      ["POST", %r{^/api/v1/login$}]
+      [ "POST", %r{^/api/v1/login$} ]
     ]
 
     jwt.revocation_requests = [
-      ["DELETE", %r{^/api/v1/logout$}]
+      [ "DELETE", %r{^/api/v1/logout$} ]
     ]
 
     jwt.expiration_time = 1.day.to_i
   end
 
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
 
-  require 'devise/orm/active_record'
+  require "devise/orm/active_record"
 
 
-  config.case_insensitive_keys = [:email]
+  config.case_insensitive_keys = [ :email ]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [:email]
+  config.strip_whitespace_keys = [ :email ]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
   # given strategies, for example, `config.params_authenticatable = [:database]` will
   # enable it only for database (email + password) authentication.
- 
-  config.skip_session_storage = [:http_auth]
+
+  config.skip_session_storage = [ :http_auth ]
 
   config.stretches = Rails.env.test? ? 1 : 12
 

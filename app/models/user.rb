@@ -5,9 +5,9 @@ class User < ApplicationRecord
   # バリデーション
   validates :name, presence: true
 
-  devise :database_authenticatable,#DBに保存されたパスワードでログイン
-         :registerable,#ユーザー登録・変更など
-         :validatable,#emailやpasswordのバリデーション
+  devise :database_authenticatable, # DBに保存されたパスワードでログイン
+         :registerable, # ユーザー登録・変更など
+         :validatable, # emailやpasswordのバリデーション
          :jwt_authenticatable,
          jwt_revocation_strategy: self
 end

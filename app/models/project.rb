@@ -16,7 +16,7 @@ class Project < ApplicationRecord
     self.due_date = due_date.presence
     self.memo = memo.presence&.strip
 
-    #self.pomodoro_work_minutes = nil if pomodoro_work_minutes.present? && pomodoro_work_minutes <= 0
-    #self.pomodoro_break_minutes = nil if pomodoro_break_minutes.present? && pomodoro_break_minutes <= 0
+    # self.pomodoro_work_minutes = nil if pomodoro_work_minutes.present? && pomodoro_work_minutes <= 0
+    # self.pomodoro_break_minutes = nil if pomodoro_break_minutes.present? && pomodoro_break_minutes <= 0
   end
 end

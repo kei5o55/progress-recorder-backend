@@ -13,5 +13,4 @@ class WorkSession < ApplicationRecord
   validates :pomodoro_count, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :pomodoro_work_minutes, numericality: { greater_than: 0 }, allow_nil: true
   validates :pomodoro_break_minutes, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-
 end

@@ -2,28 +2,28 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      #before_action :authenticate_user! # Devise-JWTによる認証チェック
+      # before_action :authenticate_user! # Devise-JWTによる認証チェック
 
       # GET /api/v1/projects
       def index
         # ログインユーザーのプロジェクトのみ取得
-        #projects = current_user.projects.order(created_at: :desc)
-        #commits = current_user.commits
-        #sessions = current_user.work_sessions
+        # projects = current_user.projects.order(created_at: :desc)
+        # commits = current_user.commits
+        # sessions = current_user.work_sessions
 
-        #いったんはログイン機能なしで全部のprojectsを
+        # いったんはログイン機能なしで全部のprojectsを
         projects = Project.all.order(created_at: :desc)
-  
+
         # Commit や WorkSession モデルがある場合は全件取得（無ければ [] でOK）
         commits = defined?(Commit) ? Commit.all : []
         sessions = defined?(WorkSession) ? WorkSession.all : []
 
-        render json: projects,status: :ok
-        #json: {
-          #projects: projects,
-          #commits: commits,
-          #sessions: sessions
-        #}, status: :ok
+        render json: projects, status: :ok
+        # json: {
+        # projects: projects,
+        # commits: commits,
+        # sessions: sessions
+        # }, status: :ok
       end
 
       # POST /api/v1/projects
@@ -52,11 +52,11 @@ module Api
           :name,
           :memo,
           :completed,
-          :dueDate,               
-          :endDate,               
-          :targetHours,           
-          :pomodoroWorkMinutes,   
-          :pomodoroBreakMinutes   
+          :dueDate,
+          :endDate,
+          :targetHours,
+          :pomodoroWorkMinutes,
+          :pomodoroBreakMinutes
         )
 
         # 2. Railsの属性名（スネークケース）にマッピングしてハッシュで返す
@@ -70,6 +70,14 @@ module Api
           pomodoro_work_minutes: p[:pomodoroWorkMinutes],
           pomodoro_break_minutes: p[:pomodoroBreakMinutes]
         }
+
+        # {
+        #  "project": {
+        #    "name": "i4re",
+        #    "completed": false,
+        #    "targetHours": 1
+        #  }
+        # }
       end
     end
   end
