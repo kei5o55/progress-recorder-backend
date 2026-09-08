@@ -22,6 +22,10 @@ Rails.application.routes.draw do
       end
 
       resources :work_sessions, only: [ :index, :create ]
+
+      resources :calendar, only: [ :index, :create ]
+      resources :day_schedules, only: [ :index, :create ]
+      resources :calendar_memos, only: [ :index, :create ]
     end
   end
 end
