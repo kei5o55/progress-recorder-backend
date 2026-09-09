@@ -1,33 +1,49 @@
 class Api::V1::CalendarMemosController < ApplicationController
+    # GET /api/v1/calendar_memos
     def index
-        render json: {
-          status: "ok",
-          message: "calendar_memos is connected successfully!",
-          timestamp: Time.current
-        }, status: :ok
+        @calendar_memos=CalendarMemo.all
+
+        render json: @calendar_memos, status: :ok
     end
 
+    # POST /api/v1/calendar_memos
     def create
-        # TODO: CalendarMemo 作成ロジックを実装
-        calendar_memo = CalendarMemo.new(calendar_memo_params)
+        @calendar_memo = CalendarMemo.new(calendar_memo_params)
 
-        if calendar_memo.save
-            render json: calendar_memo, status: :created
+        if @calendar_memo.save
+        render json: @calendar_memo, status: :created
         else
-            render json: { error: calendar_memo.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: @calendar_memo.errors.full_messages }, status: :unprocessable_entity
         end
-        
+    end
+
+    # PATCH/PUT /api/v1/calendar_memos/:id
+    def update
+        # URLの params[:id] で既存データを特定
+        @calendar_memo = CalendarMemo.find(params[:id])
+
+        # .update メソッドで変更を適用
+        if @calendar_memo.update(calendar_memo_params)
+            render json: @calendar_memo, status: :ok
+        else
+            render json: { errors: @calendar_memo.errors.full_messages }, status: :unprocessable_entity
+        end
+    rescue ActiveRecord::RecordNotFound
+        render json: { error: "指定されたメモが見つかりません" }, status: :not_found
+    end
+
+    # DELETE /api/v1/calendar_memos/:id
+    def destroy
+        @calendar_memo = CalendarMemo.find(params[:id])
+        @calendar_memo.destroy
+        head :no_content
+    rescue ActiveRecord::RecordNotFound
+        render json: { error: "指定されたメモが見つかりません" }, status: :not_found
     end
 
     private
 
     def calendar_memo_params
-        # Strong Parameters (例)
-        # params.require(:calendar_memo).permit(:date, :content)
-        p = params.require(:calendar_memo).permit(
-            :date,
-            :text,
-            :created_at,
-            )
+        params.require(:calendar_memo).permit(:date, :text, :created_at)
     end
 end

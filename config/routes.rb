@@ -16,16 +16,18 @@ Rails.application.routes.draw do
       get "health", to: "health#index"
       get "me", to: "users#me"
       get "test", to: "users#test"
+      
 
       resources :projects, only: [ :index, :create ] do
         resources :commits, only: [ :index, :create ]
       end
 
       resources :work_sessions, only: [ :index, :create ]
+      resources :commits, only: [ :index ]
 
       resources :calendar, only: [ :index, :create ]
       resources :day_schedules, only: [ :index, :create ]
-      resources :calendar_memos, only: [ :index, :create ]
+      resources :calendar_memos, only: [ :index, :create ,:update ]
     end
   end
 end
