@@ -7,16 +7,20 @@ module Api
       # TODO: 認証機能を追加する場合は有効化してください
       # before_action :authenticate_user!
 
-      # GET /api/v1/projects/:project_id/commits
+      # GET /api/v1/projects/:project_id/commits または GET /api/v1/commits
       def index
-        # 1. URLの project_id から対象のプロジェクトを取得
-        #project = Project.find(params[:project_id])
+        commits = if params[:project_id].present?
+                    # プロジェクト指定がある場合
+                    project = Project.find(params[:project_id])
+                    project.commits
+                  else
+                    # 全件取得する場合
+                    Commit.all
+                  end
 
-        # 2. そのプロジェクトに紐づくコミット一覧を取得
-        # 💡 with_attached_image を追加して ActiveStorage の N+1 問題を防止！
-        #commits = project.commits.with_attached_image.order(created_at: :desc)
-        commits = Commit.all
-        # 3. 整形して JSON で返却
+        # N+1 防止 & 降順ソート
+        commits = commits.with_attached_image.order(created_at: :desc)
+
         render json: commits.map { |commit| commit_response(commit) }, status: :ok
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Project not found" }, status: :not_found
