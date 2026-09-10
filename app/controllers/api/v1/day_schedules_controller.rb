@@ -2,7 +2,7 @@ class Api::V1::DaySchedulesController < ApplicationController
   # GET /api/v1/day_schedules
   def index
     # ⭕ 複数形の @day_schedules に修正！
-    @day_schedules = DaySchedule.all1
+    @day_schedules = DaySchedule.all
     #@day_schedules = DaySchedule.include(:user).all 将来的にこんな感じでNプラス1を解消
     # DaySchedule.all だと他人の予定まで取れちゃうので、
     # カレントユーザーに紐づく予定だけを取得する（これで認可・セキュリティも安全！）
@@ -15,6 +15,7 @@ class Api::V1::DaySchedulesController < ApplicationController
   def create
     # ⭕ day_schedule ではなく day_schedule_params を渡す！
     @day_schedule = DaySchedule.new(day_schedule_params)
+    #同じ時間帯被ってないか（ユーザごと、かつ日付ごとに）調べて、その場合はじくようにもしないといけない（フロントで一応弾いてはいるが）
 
     if @day_schedule.save
       render json: @day_schedule, status: :created
@@ -47,5 +48,17 @@ class Api::V1::DaySchedulesController < ApplicationController
       :color,
       :project_id
     )
+
+    #    {
+    #  "day_schedule":{
+    #    "data": "2026-09-08",
+    #    "title": "テストタイトル",
+    #    "start_hour": "10",
+    #    "start_minute": "0",
+    #    "end_hour": "3",
+    #    "end_minute": "0",
+    #    "project_id": ""
+    #  }
+    #}
   end
 end

@@ -52,9 +52,9 @@ module Api
         # 1. フロントから届くパラメータを許可（projectId は URL 側で担保されるため除外でOK）
         p = params.require(:commit).permit(
           :note,
-          :durationMs,
-          :startedAt,
-          :endedAt,
+          :duration_ms,
+          :started_at,
+          :ended_at,
           :image
         )
         #{
@@ -65,15 +65,6 @@ module Api
         #    "note": "Postmanからのテスト送信です"
         #  }
         #}
-
-        # 2. Railsモデルの属性名（スネークケース）にマッピング
-        {
-          note: p[:note],
-          duration_ms: p[:durationMs],
-          started_at: p[:startedAt],
-          ended_at: p[:endedAt],
-          image: p[:image]
-        }
       end
 
       def commit_response(commit)#キャメルケースにマッピング

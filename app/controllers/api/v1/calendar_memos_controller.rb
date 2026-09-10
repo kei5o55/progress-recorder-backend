@@ -36,6 +36,8 @@ class Api::V1::CalendarMemosController < ApplicationController
     def destroy
         @calendar_memo = CalendarMemo.find(params[:id])
         @calendar_memo.destroy
+
+        # 成功したら 204 No Content を返して終了（render は書かない）
         head :no_content
     rescue ActiveRecord::RecordNotFound
         render json: { error: "指定されたメモが見つかりません" }, status: :not_found
@@ -46,4 +48,11 @@ class Api::V1::CalendarMemosController < ApplicationController
     def calendar_memo_params
         params.require(:calendar_memo).permit(:date, :text, :created_at)
     end
+    #{
+    #"calendar_memo": {
+    #    "date": "2026-09-08",
+    #    "text":"test"
+    #
+    #}
+    #}
 end

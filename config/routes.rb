@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
       resources :calendar, only: [ :index, :create ]
       resources :day_schedules, only: [ :index, :create ]
-      resources :calendar_memos, only: [ :index, :create ,:update ]
+      resources :calendar_memos, only: [ :index, :create ,:update, :destroy ]
     end
   end
 end
