@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       get "test", to: "users#test"
       post 'sync/import', to: 'sync#import'
 
-      resources :projects, only: [ :index, :create, :destroy ] do
+      resources :projects, only: [ :index, :create, :destroy, :update] do
         resources :commits, only: [ :index, :create ]
       end
 

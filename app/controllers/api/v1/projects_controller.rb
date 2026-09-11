@@ -45,6 +45,17 @@ module Api
         head :no_content
       end
 
+      # PATCH /api/v1/projects/:id
+      def update
+        project = Project.find(params[:id])
+
+        if project.update(project_params)
+          render json: project, status: :ok
+        else
+          render json: { errors: project.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def project_params # ユーザid等を許可しない
