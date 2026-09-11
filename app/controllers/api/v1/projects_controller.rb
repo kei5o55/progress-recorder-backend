@@ -39,7 +39,8 @@ module Api
 
       # DELETE /api/v1/projects/:id
       def destroy
-        project = current_user.projects.find(params[:id])
+        #project = current_user.projects.find(params[:id])
+        project = Project.find(params[ :id])
         project.destroy
         head :no_content
       end

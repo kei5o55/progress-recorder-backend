@@ -46,12 +46,22 @@ module Api
         render json: { error: "Project not found or access denied" }, status: :not_found
       end
 
+      # DELETE /api/v1/projects/:project_id/commits
+      def destroy
+        commit = Commit.find(params[:id])
+        commit.destroy
+        head :no_content # 💡 成功時はレスポンスボディを返さずに204 No Contentを返すのがRESTful
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Commit not found" }, status: :not_found
+      end
+
       private
 
       def commit_params
         # 1. フロントから届くパラメータを許可（projectId は URL 側で担保されるため除外でOK）
         p = params.require(:commit).permit(
           :note,
+          :project_id,
           :duration_ms,
           :started_at,
           :ended_at,

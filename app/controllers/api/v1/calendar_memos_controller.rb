@@ -52,7 +52,6 @@ class Api::V1::CalendarMemosController < ApplicationController
     #"calendar_memo": {
     #    "date": "2026-09-08",
     #    "text":"test"
-    #
     #}
     #}
 end
