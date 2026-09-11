@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       end
 
       resources :work_sessions, only: [ :index, :create ]
-      resources :commits, only: [ :index ]
+      resources :commits, only: [ :index, :destroy ]
 
       resources :calendar, only: [ :index, :create ]
       resources :day_schedules, only: [ :index, :create ]

@@ -46,7 +46,7 @@ module Api
         render json: { error: "Project not found or access denied" }, status: :not_found
       end
 
-      # DELETE /api/v1/projects/:project_id/commits
+      # DELETE /api/v1/commits/:id
       def destroy
         commit = Commit.find(params[:id])
         commit.destroy
