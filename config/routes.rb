@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get "health", to: "health#index"
       get "me", to: "users#me"
       get "test", to: "users#test"
-      
+      post 'sync/import', to: 'sync#import'
 
       resources :projects, only: [ :index, :create, :destroy ] do
         resources :commits, only: [ :index, :create ]
@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
       resources :work_sessions, only: [ :index, :create ]
       resources :commits, only: [ :index, :destroy ]
+      
 
       resources :calendar, only: [ :index, :create ]
       resources :day_schedules, only: [ :index, :create ]
