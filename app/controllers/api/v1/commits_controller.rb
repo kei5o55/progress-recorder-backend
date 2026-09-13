@@ -4,10 +4,10 @@ module Api
       # Active Storage の URL 生成ヘルパーを使用可能にする
       include Rails.application.routes.url_helpers
 
-      # TODO: 認証機能を追加する場合は有効化してください
+      # 認証機能を追加する場合は有効化
       # before_action :authenticate_user!
 
-      # GET /api/v1/projects/:project_id/commits または GET /api/v1/commits
+      # GET /api/v1/projects/:project_id/commits
       def index
         commits = if params[:project_id].present?
                     # プロジェクト指定がある場合
@@ -34,7 +34,6 @@ module Api
         # 💡 project.commits.build(commit_params) 時に project_id は自動設定される
         commit = project.commits.build(commit_params)
 
-        # TODO: 作成者の紐付けを行う場合は有効化してください
         # commit.user = current_user
 
         if commit.save
