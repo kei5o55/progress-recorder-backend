@@ -39,9 +39,21 @@ module Api
 
       # DELETE /api/v1/projects/:id
       def destroy
-        project = current_user.projects.find(params[:id])
+        # project = current_user.projects.find(params[:id])
+        project = Project.find(params[:id])
         project.destroy
         head :no_content
+      end
+
+      # PATCH /api/v1/projects/:id
+      def update
+        project = Project.find(params[:id])
+
+        if project.update(project_params)
+          render json: project, status: :ok
+        else
+          render json: { errors: project.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       private

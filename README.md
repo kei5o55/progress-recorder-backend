@@ -92,3 +92,69 @@ wslからやってね
       note:        p[:note]
     }
   end
+
+
+
+## 📐 建築・設計方針 (Architecture & Security)
+
+### 1. ID 設計 (UUID & サーバー主導の採番)
+
+本プロジェクトでは、フロントエンド（Next.js）およびバックエンド（Rails API / PostgreSQL）間での主キー（ID）管理において、**「バックエンド主導の UUID 採番モデル」** を採用しています。
+
+* **データベース設計:** 
+  PostgreSQL の `pgcrypto` エクステンションを使用し、`id: :uuid, default: -> { "gen_random_uuid()" }` を設定。
+* **データフロー:**
+  1. **新規作成 (`POST /api/v1/projects`):**
+     * クライアントは `id` を含めずにリクエストボディを送信。
+     * PostgreSQL 側で不可逆かつユニークな UUID が自動発番される。
+     * レスポンスに含まれる `id`（UUID）をクライアント側で取得・保持する。
+  2. **更新・削除 (`PATCH` / `DELETE /api/v1/projects/:id`):**
+     * クライアントは保持している `id` を **パスパラメータ（URL）** に埋め込んで送信。
+
+#### 💡 この設計を採用した理由
+* **セキュリティ・整合性の担保:** データの発番・管理権限をデータベース（信頼できる環境）に一元化し、クライアント側からの不正な ID 注入を防ぐため。
+* **データ競合の防止:** 自動採番（Auto Increment Integer）ではなく UUID を採用することで、ID 推測攻撃を防ぎ、将来的なマルチデバイス同期やデータ統合時の ID 衝突リスクを排除するため。
+
+---
+
+### 2. 認証・認可と Strong Parameters の分離
+
+リクエスト処理における「属性レベルの制御」と「リソース権限の検証」のレイヤーを明確に分離して実装しています。
+
+* **Strong Parameters（属性レベルの保護）:**
+  * 新規作成・更新ともに **リクエストボディでの `:id` の受け取り（許可）は行わない**。
+  * 主キー（`id`）の書き換え（Immutable な値への操作）をボディレベルで遮断し、マスアサインメント脆弱性を防止。
+* **JWT 認証 & スコープ制限（リソースレベルの認可）:**
+  * リソースの特定・更新は、URLのパスパラメータ `params[:id]` を利用。
+  * 単に `Project.find(params[:id])` で検索するのではなく、必ずログインユーザーのスコープ制限（`current_user.projects.find(params[:id])`）を噛ませて検索を実施。
+
+```ruby
+# app/controllers/api/v1/projects_controller.rb
+
+def update
+  # 1. 認可: ログインユーザーの所有リソースからのみ params[:id] で特定
+  @project = current_user.projects.find(params[:id])
+
+  # 2. 更新: Strong Parameters 経由で許可された属性のみ更新
+  if @project.update(project_params)
+    render json: @project, status: :ok
+  else
+    render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
+  end
+end
+
+private
+
+def project_params
+  # :id は許可せず、安全な属性のみ定義
+  params.require(:project).permit(
+    :name,
+    :completed,
+    :due_date,
+    :end_date,
+    :memo,
+    :pomodoro_work_minutes,
+    :pomodoro_break_minutes,
+    :target_hours
+  )
+end

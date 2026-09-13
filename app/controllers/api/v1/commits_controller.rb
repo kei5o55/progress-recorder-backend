@@ -1,18 +1,26 @@
 module Api
   module V1
     class CommitsController < ApplicationController
-      # TODO: 認証機能を追加する場合は有効化してください
+      # Active Storage の URL 生成ヘルパーを使用可能にする
+      include Rails.application.routes.url_helpers
+
+      # 認証機能を追加する場合は有効化
       # before_action :authenticate_user!
 
       # GET /api/v1/projects/:project_id/commits
       def index
-        # 1. URLの project_id から対象のプロジェクトを取得
-        project = Project.find(params[:project_id])
+        commits = if params[:project_id].present?
+                    # プロジェクト指定がある場合
+                    project = Project.find(params[:project_id])
+                    project.commits
+        else
+                    # 全件取得する場合
+                    Commit.all
+        end
 
-        # 2. そのプロジェクトに紐づくコミット一覧を新しい順で取得
-        commits = project.commits.order(created_at: :desc)
+        # N+1 防止 & 降順ソート
+        commits = commits.with_attached_image.order(created_at: :desc)
 
-        # 3. 整形して JSON で返却
         render json: commits.map { |commit| commit_response(commit) }, status: :ok
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Project not found" }, status: :not_found
@@ -22,13 +30,14 @@ module Api
       def create
         # 1. Project ID から検索
         project = Project.find(params[:project_id])
+
+        # 💡 project.commits.build(commit_params) 時に project_id は自動設定される
         commit = project.commits.build(commit_params)
 
-        # TODO: 作成者の紐付けを行う場合は有効化してください
         # commit.user = current_user
 
         if commit.save
-          render json: commit_response(commit), status: :ok
+          render json: commit_response(commit), status: :created # 💡 成功時は :created (201) がよりRESTful
         else
           render json: { errors: commit.errors.full_messages }, status: :unprocessable_entity
         end
@@ -36,40 +45,47 @@ module Api
         render json: { error: "Project not found or access denied" }, status: :not_found
       end
 
+      # DELETE /api/v1/commits/:id
+      def destroy
+        commit = Commit.find(params[:id])
+        commit.destroy
+        head :no_content # 💡 成功時はレスポンスボディを返さずに204 No Contentを返すのがRESTful
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Commit not found" }, status: :not_found
+      end
+
       private
 
       def commit_params
-        # 1. フロントから届くキャメルケースのキーを許可
+        # 1. フロントから届くパラメータを許可（projectId は URL 側で担保されるため除外でOK）
         p = params.require(:commit).permit(
-          :projectId,
           :note,
-          :durationMs,
-          :startedAt,
-          :endedAt,
+          :project_id,
+          :duration_ms,
+          :started_at,
+          :ended_at,
           :image
         )
-
-        # 2. Railsモデルの属性名（スネークケース）にマッピング
-        {
-          project_id: p[:projectId],
-          note: p[:note],
-          duration_ms: p[:durationMs],
-          started_at: p[:startedAt],
-          ended_at: p[:endedAt],
-          image: p[:image]
-        }
+        # {
+        #  "commit": {
+        #    "startedAt": "2026-09-09T10:00:00Z",
+        #    "endedAt": "2026-09-09T11:00:00Z",
+        #    "durationMs": 3600000,
+        #    "note": "Postmanからのテスト送信です"
+        #  }
+        # }
       end
 
-      def commit_response(commit)
+      def commit_response(commit)# キャメルケースにマッピング
         {
           id: commit.id,
-          project_id: commit.project_id,
+          projectId: commit.project_id,
           note: commit.note,
-          started_at: commit.started_at,
-          ended_at: commit.ended_at,
-          duration_ms: commit.duration_ms,
-          # Active Storage やモデルのメソッドから生成されたURLを返却
-          image_url: commit.try(:image_url)
+          startedAt: commit.started_at,
+          endedAt: commit.ended_at,
+          durationMs: commit.duration_ms,
+          # 💡 ActiveStorage の添付有無を判定してパス/URLを生成
+          image: commit.image.attached? ? rails_blob_path(commit.image, only_path: true) : nil
         }
       end
     end

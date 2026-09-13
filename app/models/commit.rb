@@ -6,6 +6,12 @@ class Commit < ApplicationRecord
   has_one_attached :image
 
   validates :duration_ms, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  # 通常の存在チェックなど
+  validates :started_at, presence: true
+  validates :ended_at, presence: true
+
+  # カスタムバリデーションの登録
+  validate :started_at_must_be_before_ended_at
 
   # フロントエンドに返す JSON の構造を整える
   def as_json(options = {})
@@ -25,5 +31,17 @@ class Commit < ApplicationRecord
     Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
   rescue StandardError
     nil
+  end
+
+  private
+
+  def started_at_must_be_before_ended_at
+    # 両方の値が存在するときだけ比較する（nil の際のカスケードエラー防止）
+    return if started_at.blank? || ended_at.blank?
+
+    if started_at > ended_at
+      # errors.add(:対象属性, "エラーメッセージ")
+      errors.add(:started_at, "は終了日時（ended_at）より前の時間を指定してください")
+    end
   end
 end
