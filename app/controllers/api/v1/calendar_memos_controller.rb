@@ -48,10 +48,10 @@ class Api::V1::CalendarMemosController < ApplicationController
     def calendar_memo_params
         params.require(:calendar_memo).permit(:date, :text, :created_at)
     end
-    #{
-    #"calendar_memo": {
-    #    "date": "2026-09-08",
-    #    "text":"test"
-    #}
-    #}
+  # {
+  # "calendar_memo": {
+  #    "date": "2026-09-08",
+  #    "text":"test"
+  # }
+  # }
 end

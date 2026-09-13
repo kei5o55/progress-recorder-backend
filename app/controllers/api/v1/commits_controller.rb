@@ -13,10 +13,10 @@ module Api
                     # プロジェクト指定がある場合
                     project = Project.find(params[:project_id])
                     project.commits
-                  else
+        else
                     # 全件取得する場合
                     Commit.all
-                  end
+        end
 
         # N+1 防止 & 降順ソート
         commits = commits.with_attached_image.order(created_at: :desc)
@@ -30,7 +30,7 @@ module Api
       def create
         # 1. Project ID から検索
         project = Project.find(params[:project_id])
-        
+
         # 💡 project.commits.build(commit_params) 時に project_id は自動設定される
         commit = project.commits.build(commit_params)
 
@@ -66,17 +66,17 @@ module Api
           :ended_at,
           :image
         )
-        #{
+        # {
         #  "commit": {
         #    "startedAt": "2026-09-09T10:00:00Z",
         #    "endedAt": "2026-09-09T11:00:00Z",
         #    "durationMs": 3600000,
         #    "note": "Postmanからのテスト送信です"
         #  }
-        #}
+        # }
       end
 
-      def commit_response(commit)#キャメルケースにマッピング
+      def commit_response(commit)# キャメルケースにマッピング
         {
           id: commit.id,
           projectId: commit.project_id,

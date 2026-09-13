@@ -62,13 +62,13 @@ module Api
         end
 
         render json: {
-          status: 'success',
+          status: "success",
           imported_projects_count: imported_projects_count,
           imported_commits_count: imported_commits_count
         }, status: :ok
 
       rescue => e
-        render json: { status: 'error', message: e.message }, status: :unprocessable_entity
+        render json: { status: "error", message: e.message }, status: :unprocessable_entity
       end
 
       private
@@ -86,11 +86,11 @@ module Api
       end
 
       def attach_base64_image(commit, base64_data)
-        return unless base64_data.start_with?('data:image')
+        return unless base64_data.start_with?("data:image")
 
-        header, data = base64_data.split(',')
+        header, data = base64_data.split(",")
         mime_type = header.match(%r{data:(.*?);base64})[1]
-        extension = mime_type.split('/').last
+        extension = mime_type.split("/").last
         decoded_data = Base64.decode64(data)
 
         commit.image.attach(

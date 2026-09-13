@@ -32,7 +32,7 @@ class Commit < ApplicationRecord
   rescue StandardError
     nil
   end
-  
+
   private
 
   def started_at_must_be_before_ended_at

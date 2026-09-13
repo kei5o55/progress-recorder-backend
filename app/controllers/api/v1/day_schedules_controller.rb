@@ -2,10 +2,10 @@ class Api::V1::DaySchedulesController < ApplicationController
   # GET /api/v1/day_schedules
   def index
     @day_schedules = DaySchedule.all
-    #@day_schedules = DaySchedule.include(:user).all 将来的にこんな感じでNプラス1を解消
+    # @day_schedules = DaySchedule.include(:user).all 将来的にこんな感じでNプラス1を解消
     # DaySchedule.all だと他人の予定まで取れちゃうので、
     # カレントユーザーに紐づく予定だけを取得する
-    #@day_schedules = current_user.day_schedules.includes(:user)
+    # @day_schedules = current_user.day_schedules.includes(:user)
 
     render json: @day_schedules, status: :ok
   end
@@ -13,7 +13,7 @@ class Api::V1::DaySchedulesController < ApplicationController
   # POST /api/v1/day_schedules
   def create
     @day_schedule = DaySchedule.new(day_schedule_params)
-    #同じ時間帯被ってないか（ユーザごと、かつ日付ごとに）調べて、その場合はじくようにもしないといけない（フロントで一応弾いてはいるが）
+    # 同じ時間帯被ってないか（ユーザごと、かつ日付ごとに）調べて、その場合はじくようにもしないといけない（フロントで一応弾いてはいるが）
 
     if @day_schedule.save
       render json: @day_schedule, status: :created
@@ -26,7 +26,7 @@ class Api::V1::DaySchedulesController < ApplicationController
   def destroy
     @day_schedule = DaySchedule.find(params[:id])
     @day_schedule.destroy
-    head :no_content 
+    head :no_content
   rescue ActiveRecord::RecordNotFound
     render json: { error: "指定されたスケジュールが見つかりません" }, status: :not_found
   end
@@ -38,7 +38,7 @@ class Api::V1::DaySchedulesController < ApplicationController
       :date,
       :title,
       :start_hour,
-      :start_minute, 
+      :start_minute,
       :end_hour,
       :end_minute,
       :color,
@@ -55,6 +55,6 @@ class Api::V1::DaySchedulesController < ApplicationController
     #    "end_minute": "0",
     #    "project_id": ""
     #  }
-    #}
+    # }
   end
 end
